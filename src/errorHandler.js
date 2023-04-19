@@ -1,7 +1,21 @@
-function handleError(response) {
-    if (!response.ok) {
-        throw Error(response.statusText);
+let errorHandlers = {
+    handleError(error) {
+        document.querySelector('.result').innerHTML = "";
+
+        document.querySelector('.result').innerHTML = `<div class="alert alert-danger" role="alert">
+        ${error.message}
+    </div>`;
+    },
+    coughtError(error){
+        const err = new Error('Oops... something went wrong.');
+        console.log(error);
+        document.querySelector('.result').innerHTML = "";
+
+        document.querySelector('.result').innerHTML = `<div class="alert alert-danger" role="alert">
+        Oops... something went wrong.
+    </div>`;
     }
-    return response;
 }
-export default test;
+
+
+export default errorHandlers;

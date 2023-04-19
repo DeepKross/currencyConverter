@@ -1,3 +1,4 @@
+import errorHandler from "./errorHandler.js";
 
 let myHeaders = new Headers();
 myHeaders.append("apikey", "crQzi7QSkLURfV7I0gOQe4ThqevTVQTz");
@@ -17,14 +18,21 @@ export let getSymbols = {
         fetch(this.url + "/symbols", this.requestOptions)
             .then(response => response.json())
             .then(response => {
-                document.querySelector('.all-currency').innerHTML = "";
-                //set response to display in div with class 'all-currency'
-                for (const key in response.symbols) {
-                    //console.log(response.symbols);
-                    document.querySelector('.all-currency').innerHTML += `${key}: ${response.symbols[key]}<br>`;
+                if(Object.keys(response)[0] === "error"){
+                    errorHandler.handleError(response.error);
+                }
+                else {
+                    document.querySelector('.all-currency').innerHTML = "";
+                    //set response to display in div with class 'all-currency'
+                    for (const key in response.symbols) {
+                        //console.log(response.symbols);
+                        document.querySelector('.all-currency').innerHTML += `${key}: ${response.symbols[key]}<br>`;
+                    }
                 }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                errorHandler.coughtError(error);
+            });
     }
 }
 
@@ -34,11 +42,18 @@ export let convert = {
         fetch(this.url + `/convert?from=USD&to=${to}&amount=${amount}`, this.requestOptions)
             .then(response => response.json())
             .then(response => {
-                document.querySelector('.result').innerHTML = "";
-                //set response to display in div with class 'result'
-                document.querySelector('.result').innerHTML += `${amount} USD = ${response.result} ${to}`;
+                if(Object.keys(response)[0] === "error"){
+                    errorHandler.handleError(response.error);
+                }
+                else {
+                    document.querySelector('.result').innerHTML = "";
+                    //set response to display in div with class 'result'
+                    document.querySelector('.result').innerHTML += `${amount} USD = ${response.result} ${to}`;
+                }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                errorHandler.coughtError(error);
+            });
     }
 }
 
@@ -54,6 +69,8 @@ export let getLatest = {
                     document.querySelector('.all-currency').innerHTML += `${key}: ${response.rates[key]}<br>`;
                 }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                alert(error);
+            });
     }
 }
