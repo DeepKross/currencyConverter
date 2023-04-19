@@ -9,6 +9,7 @@ let errorHandlers = {
     coughtError(error){
         const err = new Error('Oops... something went wrong.');
         console.log(error);
+        alert(err);
         document.querySelector('.result').innerHTML = "";
 
         document.querySelector('.result').innerHTML = `<div class="alert alert-danger" role="alert">
